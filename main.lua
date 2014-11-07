@@ -71,32 +71,32 @@ local function GetName(_obj) return _obj.name end
 
 EMCON = {Passive = 0, Active = 1}
 function SetEMCON(_obj, _desc)
-  if _desc = {} then
+  if _desc == {} then
     ScenEdit_SetEMCON(GetType(_obj),GetName(_obj),'Inherit')
   end
 
   local cstr = {}
-  if _desc.Radar != nil then
-    if _desc.Radar = EMCON.Passive then
+  if _desc.Radar ~= nil then
+    if _desc.Radar == EMCON.Passive then
       table.insert(cstr,"Radar=Passive")
     end
-    if _desc.Radar = EMCON.Active then
+    if _desc.Radar == EMCON.Active then
       table.insert(cstr,"Radar=Active")
     end
   end
-  if _desc.Sonar != nil then
-    if _desc.Sonar = EMCON.Passive then
+  if _desc.Sonar ~= nil then
+    if _desc.Sonar == EMCON.Passive then
       table.insert(cstr,"Sonar=Passive")
     end
-    if _desc.Sonar = EMCON.Active then
+    if _desc.Sonar == EMCON.Active then
       table.insert(cstr,"Sonar=Active")
     end
   end
-  if _desc.OECM != nil then
-    if _desc.OECM = EMCON.Passive then
+  if _desc.OECM ~= nil then
+    if _desc.OECM == EMCON.Passive then
       table.insert(cstr,"OECM=Passive")
     end
-    if _desc.OECM = EMCON.Active then
+    if _desc.OECM == EMCON.Active then
       table.insert(cstr,"OECM=Active")
     end
   end
