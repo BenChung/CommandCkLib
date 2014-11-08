@@ -1,4 +1,3 @@
-
 function Dms(_deg, _min, _sec)
    return _deg + _min/60 + _sec/3600
 end
@@ -102,22 +101,49 @@ function SetEMCON(_obj, _desc)
   end
   ScenEdit_SetEMCON(GetType(_obj),GetName(_obj),table.concat(cstr,';'))
 end
- 
-function AddShip(_side, _name, _spawn, _pos)
-   ScenEdit_AddShip(_side, _name, _spawn.id, 'DEC', _pos.lat, _pos.lon)
+
+function Ship(_name, _id)
+  return function (_side,_pos)
+    ScenEdit_AddShip(_side, _name, _id.id, 'DEC', _pos.lat, _pos.lon)
+  end
 end
- 
-function AddAircraft(_side, _name, _spawn, _loadout, _pos)
-   ScenEdit_AddAircraft(_side, _name, _spawn.id, _loadout, 'DEC', _pos.lat, _pos.lon)
+
+function Aircraft(_name, _id, _loadout)
+  return function (_side,_pos)
+    ScenEdit_AddAircraft(_side, _name, _id.id, _loadout, 'DEC', _pos.lat, _pos.lon)
+  end
 end
- 
-function AddSubmarine(_side, _name, _spawn, _pos)
-   ScenEdit_AddSubmarine(_side, _name, _spawn.id, 'DEC', _pos.lat, _pos.lon)
+
+function Submarine(_name,_id)
+  return function (_side,_pos)
+    ScenEdit_AddSubmarine(_side, _name, _id.id, 'DEC', _pos.lat, _pos.lon)
+  end
 end
- 
-function AddFacility(_side, _name, _spawn, _pos)
-   if _pos.orient == nil then
-     _pos.orient = 0
-   end
-   ScenEdit_AddFacility(_side, _name, _spawn.id, _pos.orient, 'DEC', _pos.lat, _pos.lon)
+
+function Facility(_name,_id)
+  return function (_side,_pos)
+    if _pos.orient == nil then
+      _pos.orient = 0
+    end
+    ScenEdit_AddFacility(_side, _name, _id.id, _pos.orient, 'DEC', _pos.lat, _pos.lon)
+  end
+end 
+
+function Offset( _unit, _offset )
+  return function (_side,_pos)
+    _unit(_side,{lat = _pos.lat + _offset.lat, lon = _pos.lon + _offset.lon, orient = _pos.orient})
+  end
+end
+
+function Combine( ... )
+  local vg = {...}
+  return function (_side,_pos)
+    for i,unit in ipairs(vg) do
+      (unit)(_side,_pos)
+    end
+  end
+end
+
+function AddUnit(_side, _unit, _pos)
+  _unit(_side,_pos)
 end
